@@ -23,18 +23,18 @@ resource "aws_instance" "mine_ec33" {
   }
   provisioner "local-exec" {
     //Heredoc syntax
-    command = <<-EOF
+    command    = <<-EOF
     echo "Instance Created"
     echo "IP: ${self.private_ip}" >> server_ip_ec2.txt
     echo "ID: ${self.id}" >> server_details_ec2.txt
     EOF
     on_failure = continue
   }
-   provisioner "local-exec" {
+  provisioner "local-exec" {
     when = destroy
     //Heredoc syntax
-    command = "echo 'Instance Destroyed'"
-    on_failure= fail
+    command    = "echo 'Instance Destroyed'"
+    on_failure = fail
 
   }
 }

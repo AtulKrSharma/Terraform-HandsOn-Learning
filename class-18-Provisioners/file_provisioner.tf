@@ -16,9 +16,9 @@ resource "aws_instance" "mine_ec122" {
   }
 
   provisioner "file" {
-    source = "./server_ip_ec1.txt"
+    source      = "./server_ip_ec1.txt"
     destination = "/tmp/server_ip_ec1.txt"
-  on_failure = fail
+    on_failure  = fail
   }
 }
 
