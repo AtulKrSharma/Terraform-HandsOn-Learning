@@ -25,6 +25,22 @@ variable "my_instance_type" {
 }
 
 variable "my_ami" {
-    type = string
-    description = "my_ami"
+  type        = string
+  description = "my_ami"
 }
+
+variable "my_cpu_options" {
+  type = object({
+    core_count       = optional(number, 3)
+    amd_sev_snp      = optional(string)
+    threads_per_core = optional(number, 3)
+  })
+  default = null
+}
+
+variable "my_tags" {
+  description = "A mapping of tags to assign to the resource"
+  type        = map(string)
+  default     = {}
+}
+
