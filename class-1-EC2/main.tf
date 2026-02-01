@@ -13,10 +13,26 @@ terraform {
 }
 
 provider "aws" {
-  # Configuration options
   region = "us-east-1"
 }
 
+variable "my_secret_pwd" {
+  default = "ILOVEYOU"
+}
+
+output "output_my_secret_pwd" {
+  value = var.my_secret_pwd
+  sensitive = true
+}
+
+provider "vault" {
+  address = ""
+}
+
+data "vault_generic_secret" "name" {
+  path = "db/credentials"
+  
+}
 resource "aws_instance" "ec2" {
   ami           = "ami-07ff62358b87c7116"
   instance_type = "t3.micro"

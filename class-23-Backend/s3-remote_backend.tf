@@ -2,24 +2,23 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~>6.28.0"
+      version = "6.28.0"
     }
   }
+  backend "s3" {
+    bucket       = "devops-tf-state-1682"
+    key          = "prod.tfstate"
+    region       = "us-east-1"
+    use_lockfile = true
+  }
+}
+
+locals {
+  my_region = "us-east-1"
 }
 
 provider "aws" {
-  region = "us-east-1"
-}
-
-resource "aws_instance" "mine_ec2" {
-  ami                    = "ami-07ff62358b87c7116"
-  instance_type          = "t3.micro"
-  # this key is important
-  vpc_security_group_ids = [aws_security_group.my_sg.id]
-  tags = {
-    Name = "mine_ec2"
-  }
-  user_data =  file("${path.module}/user_data.sh")
+  region = local.my_region
 }
 
 data "aws_vpc" "main" {
@@ -42,14 +41,6 @@ resource "aws_vpc_security_group_ingress_rule" "allow_tls_80" {
   from_port         = 80
   ip_protocol       = "tcp"
   to_port           = 80
-}
-
-resource "aws_vpc_security_group_ingress_rule" "allow_ssh_22" {
-  security_group_id = aws_security_group.my_sg.id
-  cidr_ipv4         = "0.0.0.0/0" #data.aws_vpc.main.cidr_block
-  from_port         = 22
-  ip_protocol       = "tcp"
-  to_port           = 22
 }
 
 resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
