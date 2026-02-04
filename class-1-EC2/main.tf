@@ -29,10 +29,9 @@ provider "vault" {
   address = ""
 }
 
-data "vault_generic_secret" "name" {
-  path = "db/credentials"
-  
-}
+# data "vault_generic_secret" "name" {
+#   path = "db/credentials"
+# }
 resource "aws_instance" "ec2" {
   ami           = "ami-07ff62358b87c7116"
   instance_type = "t3.micro"
